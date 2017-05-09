@@ -1,0 +1,1 @@
+Project to streamline stock detailing during truck receiving at Best Buy.
