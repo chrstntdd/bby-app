@@ -1,1 +1,0 @@
-document.write('Don\'t think about it.')
