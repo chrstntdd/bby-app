@@ -50,14 +50,14 @@ const handleUPCInput = () => {
 const renderProduct = (data) => {
   let productDetailsHTML = (
     '<li>' +
-    '<p class="name"></p>' +
-    '<p class="sku"></p>' +
-    '<p class="upc"></p>' +
-    '<p class="department"></p>' +
-    '<p class="class"></p>' +
-    '<p class="quantity"></p>' +
-    '<button class="decrement-quantity">-1</button>' +
-    '<button class="remove-item">remove item</button>' +
+      '<p class="name"></p>' +
+      '<p class="sku"></p>' +
+      '<p class="upc"></p>' +
+      '<p class="department"></p>' +
+      '<p class="class"></p>' +
+      '<p class="quantity"></p>' +
+      '<button class="decrement-quantity">-1</button>' +
+      '<button class="remove-item">remove item</button>' +
     '</li>'
   );
 
@@ -81,13 +81,21 @@ const renderProduct = (data) => {
 }
 
 const handleRemoveItem = () => {
-  $('.remove-item').on('click', () => {
-    //
-  })
+  $('#product-list').on('click', '.remove-item', e => {
+    // alert the user that theyre about to delete an item.
+    let productSku = $(e.currentTarget).parent().attr('id');
+    $(`#${productSku}`).remove();
+    let product = _.find(state.products, obj => obj.sku == productSku);
+    product.quantity = 0;
+  });
 }
 
 const handleDecrementQty = () => {
-  $('.decrement-quantity').on('click', () => {
-    //
-  })
+  $('#product-list').on('click', '.decrement-quantity',  e => {
+    let productSku = $(e.currentTarget).parent().attr('id');
+    let currentQty = $(`#${productSku} .quantity`).text();
+    $(`#${productSku} .quantity`).text(currentQty - 1);
+    let product = _.find(state.products, obj => obj.sku == productSku);
+    product.quantity--
+  });
 }
