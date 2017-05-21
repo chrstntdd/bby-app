@@ -5,17 +5,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css'>
   <link rel='stylesheet' href='./styles.css'>
   <title>Document</title>
 </head>
 
 <body>
-  <h1>BBY TRUCK DETAIL TOOL</h1>
-  <p>888462313674, 888462815611, 888462761222</p>
-  <button id='finalize'>FINALIZE</button>
-  <input type="text" placeholder="Enter UPC" id='upc'>
-  <ul id='product-list'></ul>
+  <main>
+    <header>
+      <h1>BBY TRUCK DETAIL TOOL</h1>
+      <p>888462313674, 888462815611, 888462761222</p>
+    </header>
+    <section>
+      <button id='finalize'>FINALIZE</button>
+      <input type="text" placeholder="Enter UPC" id='upc'>
+      <table class='table table-striped table-bordered table-sm'>
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th>Class</th>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>UPC</th>
+            <th>Qty</th>
+            <th> </th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody id='table-body'>
+        </tbody>
+      </table>
+    </section>
+  </main>
   <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js"></script>
   <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
