@@ -51,16 +51,18 @@ const handleUPCInput = () => {
 
 const renderProduct = (data) => {
   let productDetailsHTML = (
-    '<li>' +
-    '<p class="name"></p>' +
-    '<p class="sku"></p>' +
-    '<p class="upc"></p>' +
-    '<p class="department"></p>' +
-    '<p class="class"></p>' +
-    '<p class="quantity"></p>' +
-    '<button class="decrement-quantity">-1</button>' +
-    '<button class="remove-item">remove item</button>' +
-    '</li>'
+    `
+    <tr id=''>
+      <td class='department' scope='row'></td>
+      <td class='class'></td>
+      <td class='sku'></td>
+      <td class='name'></td>
+      <td class='upc'></td>
+      <td class='quantity'></td>
+      <td class='remove-item'><button>remove</button></td>
+      <td class='decrement-quantity'><button>-1</button></td>
+    </tr>
+    `
   );
 
   let $temp = $(productDetailsHTML);
@@ -68,22 +70,23 @@ const renderProduct = (data) => {
 
   $temp.attr('id', data.sku);
   $temp.find('.name').text(data.name);
-  $temp.find('.sku').text('sku: ' + data.sku);
-  $temp.find('.upc').text('upc: ' + data.upc);
-  $temp.find('.department').text('department: ' + data.department);
-  $temp.find('.class').text('class: ' + data.class);
+  $temp.find('.sku').text(data.sku);
+  $temp.find('.upc').text(data.upc);
+  $temp.find('.department').text( data.department);
+  $temp.find('.class').text(data.class);
   $temp.find('.quantity').text(data.quantity);
 
   if ($(sku).length) {
+    // if the SKU exists already, increment quantity else add it to the table
     $productQty = parseInt($(sku + ' .quantity').text());
     $(sku + ' .quantity').text($productQty + 1);
   } else {
-    $('#product-list').append($temp);
+    $('#table-body').append($temp);
   }
 }
 
 const handleRemoveItem = () => {
-  $('#product-list').on('click', '.remove-item', e => {
+  $('#table-body').on('click', '.remove-item', e => {
     // alert the user that theyre about to delete an item.
     let productSku = $(e.currentTarget).parent().attr('id');
     $(`#${productSku}`).remove();
@@ -93,7 +96,7 @@ const handleRemoveItem = () => {
 }
 
 const handleDecrementQty = () => {
-  $('#product-list').on('click', '.decrement-quantity', e => {
+  $('#table-body').on('click', '.decrement-quantity', e => {
     let productSku = $(e.currentTarget).parent().attr('id');
     let currentQty = $(`#${productSku} .quantity`).text();
     let product = _.find(state.products, obj => obj.sku == productSku);
