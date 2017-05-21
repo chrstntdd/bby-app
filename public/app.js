@@ -2,10 +2,12 @@ $(() => {
   handleUPCInput();
   handleDecrementQty();
   handleRemoveItem();
+  handleFinalize();
 })
 
 const state = {
-  products: []
+  products: [],
+  finalList: []
 };
 
 let $clientUPC = $('#upc');
@@ -50,14 +52,14 @@ const handleUPCInput = () => {
 const renderProduct = (data) => {
   let productDetailsHTML = (
     '<li>' +
-      '<p class="name"></p>' +
-      '<p class="sku"></p>' +
-      '<p class="upc"></p>' +
-      '<p class="department"></p>' +
-      '<p class="class"></p>' +
-      '<p class="quantity"></p>' +
-      '<button class="decrement-quantity">-1</button>' +
-      '<button class="remove-item">remove item</button>' +
+    '<p class="name"></p>' +
+    '<p class="sku"></p>' +
+    '<p class="upc"></p>' +
+    '<p class="department"></p>' +
+    '<p class="class"></p>' +
+    '<p class="quantity"></p>' +
+    '<button class="decrement-quantity">-1</button>' +
+    '<button class="remove-item">remove item</button>' +
     '</li>'
   );
 
@@ -66,10 +68,10 @@ const renderProduct = (data) => {
 
   $temp.attr('id', data.sku);
   $temp.find('.name').text(data.name);
-  $temp.find('.sku').text(data.sku);
-  $temp.find('.upc').text(data.upc);
-  $temp.find('.department').text(data.department);
-  $temp.find('.class').text(data.class);
+  $temp.find('.sku').text('sku: ' + data.sku);
+  $temp.find('.upc').text('upc: ' + data.upc);
+  $temp.find('.department').text('department: ' + data.department);
+  $temp.find('.class').text('class: ' + data.class);
   $temp.find('.quantity').text(data.quantity);
 
   if ($(sku).length) {
@@ -91,11 +93,37 @@ const handleRemoveItem = () => {
 }
 
 const handleDecrementQty = () => {
-  $('#product-list').on('click', '.decrement-quantity',  e => {
+  $('#product-list').on('click', '.decrement-quantity', e => {
     let productSku = $(e.currentTarget).parent().attr('id');
     let currentQty = $(`#${productSku} .quantity`).text();
-    $(`#${productSku} .quantity`).text(currentQty - 1);
     let product = _.find(state.products, obj => obj.sku == productSku);
-    product.quantity--
+
+    if (currentQty <= 0) {
+      $(`#${productSku} .quantity`).text(currentQty);
+      currentQty = 0;
+      product.quantity = 0;
+    } else {
+      $(`#${productSku} .quantity`).text(currentQty - 1);
+      product.quantity--;
+    }
   });
+}
+
+const handleFinalize = () => {
+  $('#finalize').on('click', e => {
+    sortProducts();
+  });
+}
+
+const sortProducts = () => {
+  let tempState = state.products;
+  state.finalList = orderProducts(removeZeroQty(tempState));
+}
+
+const removeZeroQty = (productArr) => {
+  return _.remove(productArr, obj => obj.quantity !== 0);
+}
+
+const orderProducts = (productArr) => {
+  return _.sortBy(productArr, ['department', 'class', 'sku']);
 }
