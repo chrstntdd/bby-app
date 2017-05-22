@@ -25,6 +25,7 @@
     "webpack": "^2.5.1"
   },
   "scripts": {
-    "build": "webpack --progress --colors --watch --config webpack.config.js"
+    "build": "webpack --progress --colors --watch --config webpack.config.js",
+    "start": "node src/server.js"
   }
 }
