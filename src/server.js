@@ -38,6 +38,9 @@ app.post('/', (req, res) => {
   search.then(data => {
     if (!data.total) {
       console.log('No products found. Try your search again please.');
+      res.json({
+        message: "ERROR: NO PRODUCTS FOUND"
+      });
     } else {
       let product = data.products[0];
 
@@ -46,6 +49,7 @@ app.post('/', (req, res) => {
         sku: product.sku,
         upc: product.upc,
         department: product.department,
+        departmentId: product.departmentId,
         class: product.class
       }
       res.json(productDetails);
