@@ -57,7 +57,7 @@ app.post('/', (req, res) => {
   });
 });
 
-app.listen(process.env.PORT || 2727, () => {
+app.listen(PORT = process.env.PORT || 2727, () => {
   console.log(`Listening on port ${PORT}`)
 })
 
