@@ -3359,7 +3359,7 @@ $(function () {
   handleDecrementQty();
   handleRemoveItem();
   handleFinalize();
-  $('table').hide();
+  handleStartOver();
 });
 
 window.state = {
@@ -3411,7 +3411,7 @@ var syncCookies = function syncCookies() {
 
 var loadCookie = function loadCookie() {
   if (document.cookie.indexOf('cookieState') > -1) {
-    // if cookie exists
+    // if cookie exists, get it, parse it, set the state, show the table, then render the products in state;
     var parsedCookieData = JSON.parse(getCookie('cookieState'));
     state.products = parsedCookieData;
     $('table').show();
@@ -3483,6 +3483,14 @@ var handleDecrementQty = function handleDecrementQty() {
   });
 };
 
+var handleStartOver = function handleStartOver() {
+  $('#start-over').on('click', function (e) {
+    eraseCookie('cookieState');
+    state.products = [];
+    clearTable();
+  });
+};
+
 var handleFinalize = function handleFinalize() {
   $('#finalize').on('click', function (e) {
     clearTable();
@@ -3537,6 +3545,10 @@ var getCookie = function getCookie(c_name) {
     }
   }
   return '';
+};
+
+var eraseCookie = function eraseCookie(name) {
+  createCookie(name, '', -1);
 };
 
 /***/ }),

@@ -6,7 +6,7 @@ $(() => {
   handleDecrementQty();
   handleRemoveItem();
   handleFinalize();
-  $('table').hide();
+  handleStartOver();
 })
 
 window.state = {
@@ -58,7 +58,7 @@ const syncCookies = () => {
 
 const loadCookie = () => {
   if (document.cookie.indexOf('cookieState') > -1) {
-    // if cookie exists
+    // if cookie exists, get it, parse it, set the state, show the table, then render the products in state;
     let parsedCookieData = JSON.parse(getCookie('cookieState'));
     state.products = parsedCookieData;
     $('table').show();
@@ -140,6 +140,14 @@ const handleDecrementQty = () => {
   });
 }
 
+const handleStartOver = () => {
+  $('#start-over').on('click', e => {
+    eraseCookie('cookieState');
+    state.products = [];
+    clearTable();
+  });
+}
+
 const handleFinalize = () => {
   $('#finalize').on('click', e => {
     clearTable();
@@ -194,4 +202,8 @@ const getCookie = (c_name) => {
     }
   }
   return '';
+}
+
+const eraseCookie = (name) => {
+  createCookie(name, '', -1);
 }
