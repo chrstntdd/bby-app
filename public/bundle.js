@@ -3354,6 +3354,7 @@ module.exports = g;
 __webpack_require__(85);
 
 $(function () {
+  loadCookie();
   handleUPCInput();
   handleDecrementQty();
   handleRemoveItem();
@@ -3361,17 +3362,13 @@ $(function () {
   $('table').hide();
 });
 
-var state = {
+window.state = {
   products: [],
   finalList: []
 };
 
-var productDetailsHTML = '\n    <tr id=\'\'>\n      <td class=\'department\' scope=\'row\'></td>\n      <td class=\'class\'></td>\n      <td class=\'sku\'></td>\n      <td class=\'name\'></td>\n      <td class=\'upc\'></td>\n      <td class=\'quantity\'></td>\n      <td class=\'remove-item\'><button>remove</button></td>\n      <td class=\'decrement-quantity\'><button>-1</button></td>\n    </tr>\n    ';
-
-var $clientUPC = $('#upc');
-
 var validUPC = function validUPC() {
-  var clientUPCValue = _.trim($clientUPC.val());
+  var clientUPCValue = _.trim($('#upc').val());
   clientUPCValue.length == 12 ? callBbyAPI(clientUPCValue) : alert('UPC not recognized. Please scan again.');
 };
 
@@ -3385,9 +3382,9 @@ var callBbyAPI = function callBbyAPI(clientUPCValue) {
       state.products.push(data);
     }
     setTimeout(function () {
-      return $clientUPC.val('');
+      return $('#upc').val('');
     }, 250);
-
+    syncCookies();
     renderProduct(data);
   });
 };
@@ -3401,13 +3398,31 @@ var doesExist = function doesExist(data) {
 };
 
 var handleUPCInput = function handleUPCInput() {
-  $clientUPC.on('input', function () {
+  $('#upc').on('input', function () {
     validUPC();
     $('table').show();
   });
 };
 
+var syncCookies = function syncCookies() {
+  var jsonState = JSON.stringify(state.products);
+  createCookie('cookieState', jsonState, 1);
+};
+
+var loadCookie = function loadCookie() {
+  if (document.cookie.indexOf('cookieState') > -1) {
+    // if cookie exists
+    var parsedCookieData = JSON.parse(getCookie('cookieState'));
+    state.products = parsedCookieData;
+    $('table').show();
+    renderTable(state.products);
+  }
+};
+
 var bindDataToHTML = function bindDataToHTML(data) {
+
+  var productDetailsHTML = '\n    <tr id=\'\'>\n      <td class=\'department\' scope=\'row\'></td>\n      <td class=\'class\'></td>\n      <td class=\'sku\'></td>\n      <td class=\'name\'></td>\n      <td class=\'upc\'></td>\n      <td class=\'quantity\'></td>\n      <td class=\'remove-item\'><button>remove</button></td>\n      <td class=\'decrement-quantity\'><button>-1</button></td>\n    </tr>\n    ';
+
   var $productRow = $(productDetailsHTML);
 
   $productRow.attr('id', data.sku);
@@ -3437,13 +3452,14 @@ var renderProduct = function renderProduct(data) {
 
 var handleRemoveItem = function handleRemoveItem() {
   $('#table-body').on('click', '.remove-item', function (e) {
-    // alert the user that theyre about to delete an item.
+    // alert the user that they're about to delete an item.
     var productSku = $(e.currentTarget).parent().attr('id');
     $('#' + productSku).remove();
     var product = _.find(state.products, function (obj) {
       return obj.sku == productSku;
     });
-    product.quantity = 0;
+    _.remove(state.products, product);
+    syncCookies();
   });
 };
 
@@ -3463,40 +3479,36 @@ var handleDecrementQty = function handleDecrementQty() {
       $('#' + productSku + ' .quantity').text(currentQty - 1);
       product.quantity--;
     }
+    syncCookies();
   });
 };
 
 var handleFinalize = function handleFinalize() {
   $('#finalize').on('click', function (e) {
-    resetState();
+    clearTable();
     sortProducts();
-    renderFinalTable();
+    renderTable(state.finalList);
+    syncCookies();
   });
 };
 
 var sortProducts = function sortProducts() {
   var tempState = state.products;
-  state.finalList = orderProducts(removeZeroQty(tempState));
+  state.finalList = orderProducts(tempState);
   state.products = state.finalList;
-};
-
-var removeZeroQty = function removeZeroQty(productArr) {
-  return _.remove(productArr, function (obj) {
-    return obj.quantity !== 0;
-  });
 };
 
 var orderProducts = function orderProducts(productArr) {
   return _.orderBy(productArr, ['departmentId', 'class', 'sku'], ['asc', 'asc', 'desc']);
 };
 
-var renderFinalTable = function renderFinalTable() {
-  _.map(state.finalList, function (element) {
+var renderTable = function renderTable(collection) {
+  _.map(collection, function (element) {
     renderProduct(element);
   });
 };
 
-var resetState = function resetState() {
+var clearTable = function clearTable() {
   $('#table-body').children().remove();
 };
 
@@ -3514,11 +3526,11 @@ var createCookie = function createCookie(name, value, days) {
 
 var getCookie = function getCookie(c_name) {
   if (document.cookie.length > 0) {
-    c_start = document.cookie.indexOf(c_name + '=');
+    var c_start = document.cookie.indexOf(c_name + '=');
     if (c_start != -1) {
       c_start = c_start + c_name.length + 1;
-      c_end = document.cookie.indexOf(';' + c_start);
-      if (c_end == 1) {
+      var c_end = document.cookie.indexOf(";", c_start);
+      if (c_end == -1) {
         c_end = document.cookie.length;
       }
       return unescape(document.cookie.substring(c_start, c_end));

@@ -1,6 +1,7 @@
 import "babel-polyfill";
 
 $(() => {
+  loadCookie();
   handleUPCInput();
   handleDecrementQty();
   handleRemoveItem();
@@ -8,10 +9,64 @@ $(() => {
   $('table').hide();
 })
 
-const state = {
+window.state = {
   products: [],
   finalList: []
 };
+
+const validUPC = () => {
+  let clientUPCValue = _.trim($('#upc').val())
+  clientUPCValue.length == 12 ?
+    callBbyAPI(clientUPCValue) :
+    alert('UPC not recognized. Please scan again.');
+}
+
+const callBbyAPI = (clientUPCValue) => {
+  $.post('/', `upc=${clientUPCValue}`, (data) => {
+    if (doesExist(data)) {
+      let product = _.find(state.products, data);
+      product.quantity++;
+    } else {
+      data.quantity = 1;
+      state.products.push(data);
+    }
+    setTimeout(() => $('#upc').val(''), 250);
+    syncCookies();
+    renderProduct(data);
+  });
+}
+
+const doesExist = data => {
+  if (!_.some(state.products, data)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+const handleUPCInput = () => {
+  $('#upc').on('input', () => {
+    validUPC();
+    $('table').show();
+  });
+}
+
+const syncCookies = () => {
+  let jsonState = JSON.stringify(state.products);
+  createCookie('cookieState',jsonState ,1);
+}
+
+const loadCookie = () => {
+  if (document.cookie.indexOf('cookieState') > -1) {
+    // if cookie exists
+    let parsedCookieData = JSON.parse(getCookie('cookieState'));
+    state.products = parsedCookieData;
+    $('table').show();
+    renderTable(state.products);
+  } 
+}
+
+const bindDataToHTML = (data) => {
 
 let productDetailsHTML = (
     `
@@ -28,46 +83,6 @@ let productDetailsHTML = (
     `
   );
 
-let $clientUPC = $('#upc');
-
-const validUPC = () => {
-  let clientUPCValue = _.trim($clientUPC.val())
-  clientUPCValue.length == 12 ?
-    callBbyAPI(clientUPCValue) :
-    alert('UPC not recognized. Please scan again.');
-}
-
-const callBbyAPI = (clientUPCValue) => {
-  $.post('/', `upc=${clientUPCValue}`, data => {
-    if (doesExist(data)) {
-      let product = _.find(state.products, data);
-      product.quantity++;
-    } else {
-      data.quantity = 1;
-      state.products.push(data);
-    }
-    setTimeout(() => $clientUPC.val(''), 250);
-
-    renderProduct(data);
-  });
-}
-
-const doesExist = data => {
-  if (!_.some(state.products, data)) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-const handleUPCInput = () => {
-  $clientUPC.on('input', () => {
-    validUPC();
-    $('table').show();
-  });
-}
-
-const bindDataToHTML = (data) => {
   let $productRow = $(productDetailsHTML);
 
   $productRow.attr('id', data.sku);
@@ -98,11 +113,12 @@ const renderProduct = (data) => {
 
 const handleRemoveItem = () => {
   $('#table-body').on('click', '.remove-item', e => {
-    // alert the user that theyre about to delete an item.
+    // alert the user that they're about to delete an item.
     let productSku = $(e.currentTarget).parent().attr('id');
     $(`#${productSku}`).remove();
     let product = _.find(state.products, obj => obj.sku == productSku);
-    product.quantity = 0;
+    _.remove(state.products, product);
+    syncCookies();
   });
 }
 
@@ -120,37 +136,62 @@ const handleDecrementQty = () => {
       $(`#${productSku} .quantity`).text(currentQty - 1);
       product.quantity--;
     }
+    syncCookies();
   });
 }
 
 const handleFinalize = () => {
   $('#finalize').on('click', e => {
-    resetState();
+    clearTable();
     sortProducts();
-    renderFinalTable();
+    renderTable(state.finalList);
+    syncCookies();
   });
 }
 
 const sortProducts = () => {
   let tempState = state.products;
-  state.finalList = orderProducts(removeZeroQty(tempState));
+  state.finalList = orderProducts(tempState);
   state.products = state.finalList;
-}
-
-const removeZeroQty = (productArr) => {
-  return _.remove(productArr, obj => obj.quantity !== 0);
 }
 
 const orderProducts = (productArr) => {
   return _.orderBy(productArr, ['departmentId', 'class', 'sku'], ['asc', 'asc', 'desc']);
 }
 
-const renderFinalTable = () => {
-  _.map(state.finalList, element => {
+const renderTable = (collection) => {
+  _.map(collection, element => {
     renderProduct(element);
   });
 }
 
-const resetState = () => {
+const clearTable = () => {
   $('#table-body').children().remove();
+}
+
+const createCookie = (name, value, days) => {
+  let expires;
+  if (days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = `; expires=${date.toGMTString()}`;
+  } else {
+    expires = '';
+  }
+  document.cookie = `${name}=${value}${expires}; path=/`;
+}
+
+const getCookie = (c_name) => {
+  if (document.cookie.length > 0) {
+    let c_start = document.cookie.indexOf(`${c_name}=`);
+    if (c_start != -1) {
+      c_start = c_start + c_name.length + 1;
+      let c_end = document.cookie.indexOf(";", c_start);
+      if (c_end == -1) {
+        c_end = document.cookie.length;
+      }
+      return unescape(document.cookie.substring(c_start, c_end));
+    }
+  }
+  return '';
 }
