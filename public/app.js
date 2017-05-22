@@ -1,8 +1,11 @@
+import "babel-polyfill";
+
 $(() => {
   handleUPCInput();
   handleDecrementQty();
   handleRemoveItem();
   handleFinalize();
+  $('table').hide();
 })
 
 const state = {
@@ -10,13 +13,28 @@ const state = {
   finalList: []
 };
 
+let productDetailsHTML = (
+    `
+    <tr id=''>
+      <td class='department' scope='row'></td>
+      <td class='class'></td>
+      <td class='sku'></td>
+      <td class='name'></td>
+      <td class='upc'></td>
+      <td class='quantity'></td>
+      <td class='remove-item'><button>remove</button></td>
+      <td class='decrement-quantity'><button>-1</button></td>
+    </tr>
+    `
+  );
+
 let $clientUPC = $('#upc');
 
 const validUPC = () => {
   let clientUPCValue = _.trim($clientUPC.val())
   clientUPCValue.length == 12 ?
     callBbyAPI(clientUPCValue) :
-    console.log('Invalid UPC');
+    alert('UPC not recognized. Please scan again.');
 }
 
 const callBbyAPI = (clientUPCValue) => {
@@ -28,7 +46,7 @@ const callBbyAPI = (clientUPCValue) => {
       data.quantity = 1;
       state.products.push(data);
     }
-    setTimeout(() => $clientUPC.val(''), 500);
+    setTimeout(() => $clientUPC.val(''), 250);
 
     renderProduct(data);
   });
@@ -45,43 +63,36 @@ const doesExist = data => {
 const handleUPCInput = () => {
   $clientUPC.on('input', () => {
     validUPC();
+    $('table').show();
   });
+}
+
+const bindDataToHTML = (data) => {
+  let $productRow = $(productDetailsHTML);
+
+  $productRow.attr('id', data.sku);
+  $productRow.find('.name').text(data.name);
+  $productRow.find('.sku').text(data.sku);
+  $productRow.find('.upc').text(data.upc);
+  $productRow.find('.department').text(data.departmentId + ' - ' + data.department);
+  $productRow.find('.class').text(data.class);
+  $productRow.find('.quantity').text(data.quantity);
+
+  return $productRow;
 }
 
 
 const renderProduct = (data) => {
-  let productDetailsHTML = (
-    `
-    <tr id=''>
-      <td class='department' scope='row'></td>
-      <td class='class'></td>
-      <td class='sku'></td>
-      <td class='name'></td>
-      <td class='upc'></td>
-      <td class='quantity'></td>
-      <td class='remove-item'><button>remove</button></td>
-      <td class='decrement-quantity'><button>-1</button></td>
-    </tr>
-    `
-  );
+  let productHTML = bindDataToHTML(data);
 
-  let $temp = $(productDetailsHTML);
   let sku = '#' + data.sku;
-
-  $temp.attr('id', data.sku);
-  $temp.find('.name').text(data.name);
-  $temp.find('.sku').text(data.sku);
-  $temp.find('.upc').text(data.upc);
-  $temp.find('.department').text( data.department);
-  $temp.find('.class').text(data.class);
-  $temp.find('.quantity').text(data.quantity);
 
   if ($(sku).length) {
     // if the SKU exists already, increment quantity else add it to the table
-    $productQty = parseInt($(sku + ' .quantity').text());
+    let $productQty = parseInt($(sku + ' .quantity').text());
     $(sku + ' .quantity').text($productQty + 1);
   } else {
-    $('#table-body').append($temp);
+    $('#table-body').append(productHTML);
   }
 }
 
@@ -114,13 +125,16 @@ const handleDecrementQty = () => {
 
 const handleFinalize = () => {
   $('#finalize').on('click', e => {
+    resetState();
     sortProducts();
+    renderFinalTable();
   });
 }
 
 const sortProducts = () => {
   let tempState = state.products;
   state.finalList = orderProducts(removeZeroQty(tempState));
+  state.products = state.finalList;
 }
 
 const removeZeroQty = (productArr) => {
@@ -128,5 +142,15 @@ const removeZeroQty = (productArr) => {
 }
 
 const orderProducts = (productArr) => {
-  return _.sortBy(productArr, ['department', 'class', 'sku']);
+  return _.orderBy(productArr, ['departmentId', 'class', 'sku'], ['asc', 'asc', 'desc']);
+}
+
+const renderFinalTable = () => {
+  _.map(state.finalList, element => {
+    renderProduct(element);
+  });
+}
+
+const resetState = () => {
+  $('#table-body').children().remove();
 }
