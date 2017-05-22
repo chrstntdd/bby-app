@@ -1,5 +1,30 @@
-h1 {
-  color: seagreen; }
+header h1 {
+  text-align: center;
+  color: blue;
+  margin: 0; }
+
+header h3 {
+  text-align: center;
+  margin: 0 0 20px 0;
+  font-weight: 100; }
+
+#upc {
+  padding: 12px;
+  display: block;
+  margin: 0 auto 10px auto;
+  border: 1px solid grey;
+  border-radius: 3px;
+  text-align: center; }
+
+#finalize {
+  display: block;
+  letter-spacing: 2px;
+  color: white;
+  padding: 12px;
+  border-radius: 3px;
+  background-color: #41e079;
+  border: none;
+  margin: 0 auto 10px auto; }
 
 @media print {
   #table-body .remove-item,
@@ -7,5 +32,5 @@ h1 {
   thead tr th:nth-child(8),
   thead tr th:nth-child(7),
   #finalize,
-  section input {
+  #upc {
     display: none; } }
