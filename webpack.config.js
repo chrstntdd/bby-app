@@ -1,14 +1,18 @@
 var path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require('webpack');
+
 
 module.exports = {
+  cache: true,
   entry: ['babel-polyfill','./public/app.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   },
   plugins: [
-    new UglifyJSPlugin()
+    new webpack.optimize.UglifyJsPlugin({
+      comments: false,
+    }),
   ],
   module: {
   rules: [

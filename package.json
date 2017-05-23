@@ -23,8 +23,8 @@
     "faker": "^4.1.0",
     "mocha": "^3.3.0",
     "uglify-js": "^3.0.10",
-    "uglifyjs-webpack-plugin": "^0.4.3",
-    "webpack": "^2.5.1"
+    "webpack": "^2.5.1",
+    "webpack-bundle-analyzer": "^2.8.2"
   },
   "scripts": {
     "build": "webpack --progress --colors --watch --config webpack.config.js",
