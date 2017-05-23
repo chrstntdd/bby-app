@@ -3369,23 +3369,33 @@ window.state = {
 
 var validUPC = function validUPC() {
   var clientUPCValue = _.trim($('#upc').val());
-  clientUPCValue.length == 12 ? callBbyAPI(clientUPCValue) : alert('UPC not recognized. Please scan again.');
+  if (clientUPCValue.length == 12) {
+    callBbyAPI(clientUPCValue);
+  }
 };
 
 var callBbyAPI = function callBbyAPI(clientUPCValue) {
   $.post('/', 'upc=' + clientUPCValue, function (data) {
-    if (doesExist(data)) {
-      var product = _.find(state.products, data);
-      product.quantity++;
+    if ('message' in data) {
+      alert('UPC not recognized. Try scanning again.');
+      setTimeout(function () {
+        return $('#upc').val('');
+      }, 250);
+      syncCookies();
     } else {
-      data.quantity = 1;
-      state.products.push(data);
+      if (doesExist(data)) {
+        var product = _.find(state.products, data);
+        product.quantity++;
+      } else {
+        data.quantity = 1;
+        state.products.push(data);
+      }
+      setTimeout(function () {
+        return $('#upc').val('');
+      }, 250);
+      syncCookies();
+      renderProduct(data);
     }
-    setTimeout(function () {
-      return $('#upc').val('');
-    }, 250);
-    syncCookies();
-    renderProduct(data);
   });
 };
 

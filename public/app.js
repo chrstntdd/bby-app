@@ -15,24 +15,30 @@ window.state = {
 };
 
 const validUPC = () => {
-  let clientUPCValue = _.trim($('#upc').val())
-  clientUPCValue.length == 12 ?
-    callBbyAPI(clientUPCValue) :
-    alert('UPC not recognized. Please scan again.');
+  let clientUPCValue = _.trim($('#upc').val());
+  if (clientUPCValue.length == 12){
+    callBbyAPI(clientUPCValue);
+  }
 }
 
 const callBbyAPI = (clientUPCValue) => {
   $.post('/', `upc=${clientUPCValue}`, (data) => {
-    if (doesExist(data)) {
-      let product = _.find(state.products, data);
-      product.quantity++;
+    if ('message' in data) {
+      alert('UPC not recognized. Try scanning again.');
+      setTimeout(() => $('#upc').val(''), 250);
+      syncCookies();
     } else {
-      data.quantity = 1;
-      state.products.push(data);
+      if (doesExist(data)) {
+        let product = _.find(state.products, data);
+        product.quantity++;
+      } else {
+        data.quantity = 1;
+        state.products.push(data);
+      }
+      setTimeout(() => $('#upc').val(''), 250);
+      syncCookies();
+      renderProduct(data);
     }
-    setTimeout(() => $('#upc').val(''), 250);
-    syncCookies();
-    renderProduct(data);
   });
 }
 
