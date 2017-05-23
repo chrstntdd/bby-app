@@ -6,10 +6,7 @@ header h1 {
 header h3 {
   text-align: center;
   margin: 0 0 20px 0;
-  font-weight: 100; }
-
-table {
-  display: hidden; }
+  font-weight: 200; }
 
 #upc {
   padding: 12px;
@@ -29,7 +26,7 @@ table {
   border: none;
   margin: 0 auto 10px auto; }
 
-#start-over {
+#clear-table {
   display: block;
   letter-spacing: 2px;
   color: white;

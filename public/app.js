@@ -69,7 +69,9 @@ const loadCookie = () => {
     state.products = parsedCookieData;
     $('table').show();
     renderTable(state.products);
-  } 
+  } else {
+    $('table').hide();
+  }
 }
 
 const bindDataToHTML = (data) => {
@@ -147,7 +149,7 @@ const handleDecrementQty = () => {
 }
 
 const handleStartOver = () => {
-  $('#start-over').on('click', e => {
+  $('#clear-table').on('click', e => {
     eraseCookie('cookieState');
     state.products = [];
     clearTable();
@@ -181,6 +183,7 @@ const renderTable = (collection) => {
 
 const clearTable = () => {
   $('#table-body').children().remove();
+  $('table').hide();
 }
 
 const createCookie = (name, value, days) => {
