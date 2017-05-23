@@ -4,10 +4,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const compression = require('compression');
 const bby = require('bestbuy')(process.env.BBY_API_KEY);
 
 const app = express();
 
+app.use(compression());
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
