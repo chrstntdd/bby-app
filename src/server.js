@@ -37,9 +37,9 @@ app.post('/', (req, res) => {
 
   search.then(data => {
     if (!data.total) {
-      console.log('No products found. Try your search again please.');
       res.json({
-        message: "ERROR: NO PRODUCTS FOUND"
+        error: "NO PRODUCTS FOUND.",
+        message: "Try your search again please."
       });
     } else {
       let product = data.products[0];

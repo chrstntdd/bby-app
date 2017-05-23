@@ -28,6 +28,7 @@
   },
   "scripts": {
     "build": "webpack --progress --colors --watch --config webpack.config.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "mocha"
   }
 }
