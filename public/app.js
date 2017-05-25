@@ -173,7 +173,7 @@ const sortProducts = () => {
 }
 
 const orderProducts = (productArr) => {
-  return _.orderBy(productArr, ['departmentId', 'class', 'sku'], ['asc', 'asc', 'desc']);
+  return _.orderBy(productArr, ['departmentId', 'class', 'sku'], ['asc', 'asc', 'asc']);
 }
 
 const renderTable = (collection) => {
