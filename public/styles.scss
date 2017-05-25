@@ -19,7 +19,7 @@ header h3 {
   text-align: center;
 }
 
-#finalize {
+#format-table {
   display: block;
   letter-spacing: 2px;
   color: white;
@@ -27,7 +27,6 @@ header h3 {
   border-radius: 3px;
   background-color: #41e079;
   border: none;
-
   margin: 0 auto 10px auto;
 }
 
@@ -39,7 +38,6 @@ header h3 {
   border-radius: 3px;
   background-color: #c1000d;
   border: none;
-
   margin: 0 auto 10px auto;
 }
 
@@ -49,8 +47,8 @@ header h3 {
   #table-body .decrement-quantity,
   thead tr th:nth-child(8),
   thead tr th:nth-child(7),
-  #start-over,
-  #finalize,
+  #clear-table,
+  #format-table,
   #upc {
     display: none
   }

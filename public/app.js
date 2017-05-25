@@ -5,8 +5,8 @@ $(() => {
   handleUPCInput();
   handleDecrementQty();
   handleRemoveItem();
-  handleFinalize();
-  handleStartOver();
+  handleFormatTable();
+  handleClearTable();
 })
 
 window.state = {
@@ -148,7 +148,7 @@ const handleDecrementQty = () => {
   });
 }
 
-const handleStartOver = () => {
+const handleClearTable = () => {
   $('#clear-table').on('click', e => {
     eraseCookie('cookieState');
     state.products = [];
@@ -156,8 +156,8 @@ const handleStartOver = () => {
   });
 }
 
-const handleFinalize = () => {
-  $('#finalize').on('click', e => {
+const handleFormatTable = () => {
+  $('#format-table').on('click', e => {
     clearTable();
     sortProducts();
     renderTable(state.finalList);
