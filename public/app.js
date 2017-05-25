@@ -16,7 +16,7 @@ window.state = {
 
 const validUPC = () => {
   let clientUPCValue = _.trim($('#upc').val());
-  if (clientUPCValue.length == 12){
+  if (clientUPCValue.length == 12) {
     callBbyAPI(clientUPCValue);
   }
 }
@@ -59,7 +59,7 @@ const handleUPCInput = () => {
 
 const syncCookies = () => {
   let jsonState = JSON.stringify(state.products);
-  createCookie('cookieState',jsonState ,1);
+  createCookie('cookieState', jsonState, 1);
 }
 
 const loadCookie = () => {
@@ -76,7 +76,7 @@ const loadCookie = () => {
 
 const bindDataToHTML = (data) => {
 
-let productDetailsHTML = (
+  let productDetailsHTML = (
     `
     <tr id=''>
       <td class='department' scope='row'></td>
@@ -162,6 +162,7 @@ const handleFinalize = () => {
     sortProducts();
     renderTable(state.finalList);
     syncCookies();
+    $('table').show();
   });
 }
 
