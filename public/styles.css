@@ -37,6 +37,7 @@ header h3 {
   margin: 0 auto 10px auto; }
 
 @media print {
+  header,
   #table-body .remove-item,
   #table-body .decrement-quantity,
   thead tr th:nth-child(8),
@@ -44,4 +45,8 @@ header h3 {
   #clear-table,
   #format-table,
   #upc {
-    display: none; } }
+    display: none; }
+
+  html,
+  body {
+    margin: 0; } }

@@ -43,6 +43,7 @@ header h3 {
 
 @media print {
   // Only print table and header
+  header,
   #table-body .remove-item,
   #table-body .decrement-quantity,
   thead tr th:nth-child(8),
@@ -51,5 +52,9 @@ header h3 {
   #format-table,
   #upc {
     display: none
+  }
+  html,
+  body {
+    margin: 0;
   }
 }
