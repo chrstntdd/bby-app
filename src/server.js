@@ -52,7 +52,8 @@ app.post('/', (req, res) => {
         upc: product.upc,
         department: product.department,
         departmentId: product.departmentId,
-        class: product.class
+        modelNumber: product.modelNumber,
+        classId: product.classId
       }
       res.json(productDetails);
     }
@@ -95,4 +96,8 @@ const closeServer = () => {
   });
 }
 
-module.exports = { runServer,closeServer,app };
+module.exports = {
+  runServer,
+  closeServer,
+  app
+};
