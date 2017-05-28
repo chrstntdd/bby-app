@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 module.exports = {
   cache: true,
-  entry: ['babel-polyfill','./public/app.js'],
+  entry: ['babel-polyfill', './public/app.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
@@ -15,8 +15,10 @@ module.exports = {
     }),
   ],
   module: {
-  rules: [
-    { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
-  ],
-}
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: "babel-loader"
+    }],
+  }
 };
