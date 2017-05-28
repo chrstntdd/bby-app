@@ -1,13 +1,41 @@
-header h1 {
-  text-align: center;
-  color: blue;
-  margin: 0;
+* {
+  box-sizing: border-box;
 }
 
-header h3 {
-  text-align: center;
-  margin: 0 0 20px 0;
-  font-weight: 200;
+$BESTBUY_BLUE: #003b64;
+$BESTBUY_YELLOW: #fff200;
+@mixin button-styles ($color) {
+  display: block;
+  letter-spacing: 2px;
+  color: white;
+  padding: 12px;
+  border-radius: 3px;
+  background-color: $color;
+  border: none;
+  margin: 0 auto 10px auto;
+  font-weight: 600;
+  width: 150px;
+}
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+  h1 {
+    text-align: center;
+    color: $BESTBUY_BLUE;
+    margin: 0;
+    font-weight: 400;
+  }
+  h3 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-weight: 200;
+  }
 }
 
 #upc {
@@ -17,28 +45,47 @@ header h3 {
   border: 1px solid grey;
   border-radius: 3px;
   text-align: center;
+  width: 150px
 }
 
 #format-table {
-  display: block;
-  letter-spacing: 2px;
-  color: white;
-  padding: 12px;
-  border-radius: 3px;
-  background-color: #41e079;
-  border: none;
-  margin: 0 auto 10px auto;
+  @include button-styles(#42e079);
 }
 
 #clear-table {
-  display: block;
-  letter-spacing: 2px;
-  color: white;
-  padding: 12px;
-  border-radius: 3px;
-  background-color: #c1000d;
-  border: none;
-  margin: 0 auto 10px auto;
+  @include button-styles(#c1000d);
+}
+
+table {
+  font-family: 'Arial';
+  margin: 25px auto;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.10), 0px 10px 20px rgba(0, 0, 0, 0.05), 0px 20px 20px rgba(0, 0, 0, 0.05), 0px 30px 20px rgba(0, 0, 0, 0.05);
+  tr {
+    &:hover {
+      background: #f4f4f4;
+      td {
+        color: #555;
+      }
+    }
+  }
+  th,
+  td {
+    color: #999;
+    border: 1px solid #eee;
+    padding: 12px 35px;
+    border-collapse: collapse;
+  }
+  th {
+    background: $BESTBUY_BLUE;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 12px;
+    &.last {
+      border-right: none;
+    }
+  }
 }
 
 @media print {
@@ -46,15 +93,18 @@ header h3 {
   header,
   #table-body .remove-item,
   #table-body .decrement-quantity,
-  thead tr th:nth-child(8),
-  thead tr th:nth-child(7),
+  thead tr th:nth-child(9), // -1 button
+  thead tr th:nth-child(8), // remove button
   #clear-table,
   #format-table,
   #upc {
-    display: none
+    display: none;
+  }
+  table {
+    zoom: 70%;
   }
   html,
   body {
-    margin: 0;
+    height: auto;
   }
 }

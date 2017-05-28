@@ -7,7 +7,7 @@ $(() => {
   handleRemoveItem();
   handleFormatTable();
   handleClearTable();
-})
+});
 
 window.state = {
   products: [],
@@ -82,6 +82,7 @@ const bindDataToHTML = (data) => {
       <td class='department' scope='row'></td>
       <td class='class'></td>
       <td class='sku'></td>
+      <td class='model'</td>
       <td class='name'></td>
       <td class='upc'></td>
       <td class='quantity'></td>
@@ -94,11 +95,14 @@ const bindDataToHTML = (data) => {
   let $productRow = $(productDetailsHTML);
 
   $productRow.attr('id', data.sku);
-  $productRow.find('.name').text(data.name);
+  $productRow.find('.name').text(_.truncate(data.name, {
+    'length': 35
+  }));
   $productRow.find('.sku').text(data.sku);
   $productRow.find('.upc').text(data.upc);
   $productRow.find('.department').text(data.departmentId + ' - ' + data.department);
-  $productRow.find('.class').text(data.class);
+  $productRow.find('.class').text(data.classId);
+  $productRow.find('.model').text(data.modelNumber);
   $productRow.find('.quantity').text(data.quantity);
 
   return $productRow;
@@ -173,7 +177,7 @@ const sortProducts = () => {
 }
 
 const orderProducts = (productArr) => {
-  return _.orderBy(productArr, ['departmentId', 'class', 'sku'], ['asc', 'asc', 'asc']);
+  return _.orderBy(productArr, ['departmentId', 'classId', 'sku'], ['asc', 'asc', 'asc']);
 }
 
 const renderTable = (collection) => {

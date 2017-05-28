@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <!--<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>-->
   <link rel='stylesheet' href='./styles.css'>
-  <link rel="icon" href='./800px-Best_Buy_Logo_svg.png' type='image/x-icon'>
-  <link rel="shortcut-icon" href='./800px-Best_Buy_Logo_svg.png' type='image/x-icon'>
+  <link rel='icon' href='./800px-Best_Buy_Logo_svg.png' type='image/x-icon'>
+  <link rel='shortcut-icon' href='./800px-Best_Buy_Logo_svg.png' type='image/x-icon'>
   <title>Best Buy Truck Detail | By Christian Todd</title>
 </head>
 
@@ -19,15 +19,16 @@
       <h3>by <a href='https://github.com/chrstntdd'>Christian Todd</a></h3>
     </header>
     <section>
-      <input id='upc' type="text" placeholder="Enter UPC">
+      <input id='upc' type='text' placeholder='Enter UPC' autofocus>
       <button id='format-table'>FORMAT TABLE</button>
-      <button id="clear-table">CLEAR TABLE</button>
-      <table class='table table-striped table-bordered table-sm'>
+      <button id='clear-table'>CLEAR TABLE</button>
+      <table>
         <thead>
           <tr>
             <th>Department</th>
             <th>Class</th>
             <th>SKU</th>
+            <th>Model</th>
             <th>Name</th>
             <th>UPC</th>
             <th>Qty</th>
@@ -40,9 +41,9 @@
       </table>
     </section>
   </main>
-  <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
+  <script src='https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js'></script>
+  <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='
+    crossorigin='anonymous'></script>
   <script src='./bundle.js'></script>
 </body>
 
