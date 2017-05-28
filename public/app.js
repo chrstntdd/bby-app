@@ -7,6 +7,7 @@ $(() => {
   handleRemoveItem();
   handleFormatTable();
   handleClearTable();
+  handlePrint();
 });
 
 window.state = {
@@ -28,6 +29,7 @@ const callBbyAPI = (clientUPCValue) => {
       setTimeout(() => $('#upc').val(''), 250);
       syncCookies();
     } else {
+      $('table').show();
       if (doesExist(data)) {
         let product = _.find(state.products, data);
         product.quantity++;
@@ -53,7 +55,6 @@ const doesExist = data => {
 const handleUPCInput = () => {
   $('#upc').on('input', () => {
     validUPC();
-    $('table').show();
   });
 }
 
@@ -167,6 +168,12 @@ const handleFormatTable = () => {
     renderTable(state.finalList);
     syncCookies();
     $('table').show();
+  });
+}
+
+const handlePrint = () => {
+  $('#print-table').on('click', e => {
+    window.print();
   });
 }
 

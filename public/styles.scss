@@ -5,7 +5,7 @@
 $BESTBUY_BLUE: #003b64;
 $BESTBUY_YELLOW: #fff200;
 @mixin button-styles ($color) {
-  display: block;
+  display: inline-block;
   letter-spacing: 2px;
   color: white;
   padding: 12px;
@@ -39,26 +39,32 @@ header {
 }
 
 #upc {
-  padding: 12px;
+  font-size: 14px;
+  padding: 10px;
   display: block;
-  margin: 0 auto 10px auto;
+  margin: 0 auto 20px auto;
   border: 1px solid grey;
   border-radius: 3px;
   text-align: center;
-  width: 150px
+  width: 250px
 }
 
-#format-table {
-  @include button-styles(#42e079);
-}
-
-#clear-table {
-  @include button-styles(#c1000d);
+.table-buttons {
+  text-align: center;
+  #format-table {
+    @include button-styles(#42e079);
+  }
+  #clear-table {
+    @include button-styles(#c1000d);
+  }
+  #print-table {
+    @include button-styles(#00ABE7)
+  }
 }
 
 table {
   font-family: 'Arial';
-  margin: 25px auto;
+  margin: 10px auto;
   border-collapse: collapse;
   border: 1px solid #eee;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.10), 0px 10px 20px rgba(0, 0, 0, 0.05), 0px 20px 20px rgba(0, 0, 0, 0.05), 0px 30px 20px rgba(0, 0, 0, 0.05);
@@ -95,8 +101,7 @@ table {
   #table-body .decrement-quantity,
   thead tr th:nth-child(9), // -1 button
   thead tr th:nth-child(8), // remove button
-  #clear-table,
-  #format-table,
+  .table-buttons,
   #upc {
     display: none;
   }
