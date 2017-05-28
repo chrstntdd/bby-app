@@ -8,6 +8,7 @@ $(() => {
   handleFormatTable();
   handleClearTable();
   handlePrint();
+  handleLogin();
 });
 
 window.state = {
@@ -196,6 +197,14 @@ const renderTable = (collection) => {
 const clearTable = () => {
   $('#table-body').children().remove();
   $('table').hide();
+}
+
+const handleLogin = () => {
+  $('#login-btn').on('click', e => {
+    e.preventDefault();
+    const textInput = $('#login-form input').val();
+    $.post('/login', `textInput=${textInput}`);
+  })
 }
 
 const createCookie = (name, value, days) => {

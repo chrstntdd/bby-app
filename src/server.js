@@ -5,7 +5,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const compression = require('compression');
+const logger = require('./middleware/logger').logger;
 const bby = require('bestbuy')(process.env.BBY_API_KEY);
+
+const {
+  sendEmail
+} = require('./middleware/emailer');
 
 const app = express();
 
@@ -15,7 +20,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(morgan('common'));
+app.use(morgan('common', {
+  stream: logger.stream
+}));
 
 mongoose.Promise = global.Promise;
 
@@ -60,8 +67,21 @@ app.post('/', (req, res) => {
   });
 });
 
+app.post('/login', (req, res) => {
+  const employeeEmail = req.body.textInput;
+  app.use(sendEmail(employeeEmail));
+});
+
+app.use((err, req, res, next) => {
+  logger.error(err);
+  res.status(500).json({
+    error: 'Something went wrong'
+  }).end();
+});
+
+
 app.listen(PORT = process.env.PORT || 2727, () => {
-  console.log(`Listening on port ${PORT}`)
+  logger.info(`Listening on port ${PORT}`)
 })
 
 const runServer = (DATABASE_URL = process.env.DATABASE_URL, port = PORT) => {
