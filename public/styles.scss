@@ -105,11 +105,11 @@ table {
   #upc {
     display: none;
   }
-  table {
-    zoom: 70%;
-  }
   html,
   body {
     height: auto;
+  }
+  @page {
+    size: landscape
   }
 }
