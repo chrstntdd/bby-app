@@ -15,16 +15,9 @@ const FROM_EMAIL = process.env.FROM_EMAIL;
 //  text: "Plain text content",
 //  html: "<p>HTML version</p>"
 // }
-const sendEmail = (userEmail) => {
+const sendEmail = (emailData) => {
 
   const transporter = nodemailer.createTransport(SMTP_URL);
-
-  const emailData = {
-    from: FROM_EMAIL,
-    to: userEmail,
-    subject: `Your truck detail report from ${moment().format('MMMM Do YYYY, h:mm:ss a')}`,
-    html: `<h1>Hello, world</h1>`
-  }
 
   logger.info(`Attempting to send email from ${emailData.from}.`);
   return transporter
@@ -37,17 +30,19 @@ const sendEmail = (userEmail) => {
     });
 }
 
-// const sendTableData = (userEmail) => (err, req, res, next) => {
-//   let emailData = {
-//     from: FROM_EMAIL,
-//     to: userEmail,
-//     subject: `Your truck detail report from ${moment().format('MMMM Do YYYY, h:mm:ss a')}`,
-//     html: `<h1>Hello, world</h1>`
-//   }
-//   sendEmail(emailData);
-// }
+const emailerMiddleware = (userEmail) => {
+    const emailData = {
+      from: FROM_EMAIL,
+      to: userEmail,
+      subject: `Your truck detail report from ${moment().format('MMMM Do YYYY, h:mm:ss a')}`,
+      html: `<h1>Hello, world</h1>`
+    }
+    sendEmail(emailData);
+  }
+  (req, res, next) => {
+    next();
+  }
 
 module.exports = {
-  sendEmail,
-  // sendTableData
-};
+  emailerMiddleware
+}

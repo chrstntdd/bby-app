@@ -9,7 +9,7 @@ const logger = require('./middleware/logger').logger;
 const bby = require('bestbuy')(process.env.BBY_API_KEY);
 
 const {
-  sendEmail
+  emailerMiddleware
 } = require('./middleware/emailer');
 
 const app = express();
@@ -67,9 +67,8 @@ app.post('/', (req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
-  const employeeEmail = req.body.textInput;
-  app.use(sendEmail(employeeEmail));
+app.post('/login', (req, res, next) => {
+  emailerMiddleware(req.body.textInput);
 });
 
 app.use((err, req, res, next) => {
@@ -82,7 +81,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT = process.env.PORT || 2727, () => {
   logger.info(`Listening on port ${PORT}`)
-})
+});
 
 const runServer = (DATABASE_URL = process.env.DATABASE_URL, port = PORT) => {
   return new Promise((resolve, reject) => {
