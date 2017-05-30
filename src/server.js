@@ -40,15 +40,15 @@ app.get('*', (req, res) => {
 
 // MAIN API CALL FOR PRODUCT DETAILS //
 app.post('/', (req, res) => {
-  let upc = req.body.upc;
+  const upc = req.body.upc;
 
-  const search = bby.products('upc=' + upc);
+  const search = bby.products(`upc=${upc}`);
 
   search.then(data => {
     if (!data.total) {
       res.json({
-        error: "NO PRODUCTS FOUND.",
-        message: "Try your search again please."
+        error: 'NO PRODUCTS FOUND.',
+        message: 'Try your search again please.'
       });
     } else {
       let product = data.products[0];
@@ -67,8 +67,10 @@ app.post('/', (req, res) => {
   });
 });
 
+// call to send email
 app.post('/login', (req, res, next) => {
   emailerMiddleware(req.body.textInput);
+  res.end();
 });
 
 app.use((err, req, res, next) => {

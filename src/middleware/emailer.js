@@ -31,17 +31,17 @@ const sendEmail = (emailData) => {
 }
 
 const emailerMiddleware = (userEmail) => {
-    const emailData = {
-      from: FROM_EMAIL,
-      to: userEmail,
-      subject: `Your truck detail report from ${moment().format('MMMM Do YYYY, h:mm:ss a')}`,
-      html: `<h1>Hello, world</h1>`
-    }
-    sendEmail(emailData);
+  const emailData = {
+    from: FROM_EMAIL,
+    to: userEmail,
+    subject: `Your truck detail report from ${moment().format('MMMM Do YYYY, h:mm:ss a')}`,
+    html: `<h1>Hello, world</h1>`
   }
+  sendEmail(emailData);
   (req, res, next) => {
     next();
   }
+}
 
 module.exports = {
   emailerMiddleware
