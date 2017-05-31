@@ -6,7 +6,7 @@ $BESTBUY_BLUE: #003b64;
 $BESTBUY_YELLOW: #fff200;
 @mixin button-styles ($color) {
   display: inline-block;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   color: white;
   padding: 12px;
   border-radius: 3px;
@@ -104,6 +104,25 @@ table {
   .table-buttons,
   #upc {
     display: none;
+  }
+  table {
+    border: 1px solid black;
+    thead {
+      tr {
+        th {
+          border: 1px solid black;
+          color: black;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          border: 1px solid black;
+          color: black;
+        }
+      }
+    }
   }
   html,
   body {
