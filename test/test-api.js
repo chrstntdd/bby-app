@@ -6,7 +6,15 @@ const _ = require('lodash');
 
 const should = chai.should();
 
-const { app } = require('../src/server');
+const {
+  app,
+  runServer,
+  closeServer
+} = require('../src/server');
+const {
+  Table,
+  Product
+} = require('../src/models');
 
 chai.use(chaiHttp);
 
@@ -19,6 +27,37 @@ let generateInvalidUPC = () => faker.random.number({
   min: 100000000000,
   max: 999999999999
 });
+
+const generateProduct = () => {
+  return {
+    name: faker.name(),
+    sku: faker.number({
+      min: 1000000,
+      max: 9999999
+    }),
+    upc: generateInvalidUPC(),
+    department: faker.name(),
+    departmentId: faker.number(),
+    modelNumber: faker.name(),
+    classId: faker.number(),
+    quantity: faker.number()
+  }
+}
+
+const seedProducts = () => {
+  console.log('Seeding products');
+  const products = [];
+
+  for (let i = 0; i < 10; i++) {
+    products.push(generateProduct());
+  }
+  return Table.insertMany(products);
+}
+
+const tearDownDb = () => {
+  console.warn('REMAIN CALM: DELETING DATABASE!');
+  return mongoose.connection.dropDatabase();
+}
 
 
 describe('Best Buy API response', () => {
@@ -63,5 +102,17 @@ describe('Best Buy API response', () => {
         res.body.error.should.equal('NO PRODUCTS FOUND.');
         res.body.message.should.equal('Try your search again please.');
       });
+  });
+});
+
+describe('mongoose databse', () => {
+
+  before(() => runServer(TEST_DATABASE_URL));
+  beforeEach(() => seedProducts());
+  afterEach(() => tearDownDb());
+  after(() => closeServer());
+
+  it('', () => {
+
   });
 });
