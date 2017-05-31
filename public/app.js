@@ -96,9 +96,7 @@ const bindDataToHTML = (data) => {
   let $productRow = $(productDetailsHTML);
 
   $productRow.attr('id', data.sku);
-  $productRow.find('.name').text(_.truncate(data.name, {
-    'length': 35
-  }));
+  $productRow.find('.name').text(data.name);
   $productRow.find('.sku').text(data.sku);
   $productRow.find('.upc').text(data.upc);
   $productRow.find('.department').text(data.departmentId + ' - ' + data.department);

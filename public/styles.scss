@@ -106,29 +106,25 @@ table {
     display: none;
   }
   table {
+    margin-left: auto;
+    margin-right: auto;
     border: 1px solid black;
-    thead {
-      tr {
-        th {
-          border: 1px solid black;
-          color: black;
-        }
-      }
+    td,
+    th {
+      border: 1px solid black;
+      color: black;
+      padding: 4px 10px;
+      max-width: 350px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    tbody {
-      tr {
-        td {
-          border: 1px solid black;
-          color: black;
-        }
-      }
+    td.quantity {
+      text-align: center;
     }
   }
   html,
   body {
     height: auto;
-  }
-  @page {
-    size: landscape
   }
 }
