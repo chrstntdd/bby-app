@@ -4,9 +4,15 @@ const mongoose = require('mongoose');
 const faker = require('faker');
 const _ = require('lodash');
 
+process.env.NODE_ENV = 'test';
+
 const should = chai.should();
 
-const { app } = require('../src/server');
+const {
+  app,
+  runServer,
+  closeServer
+} = require('../src/server');
 
 chai.use(chaiHttp);
 
@@ -40,15 +46,16 @@ describe('Best Buy API response', () => {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.an('object');
-        res.body.should.include.keys('name', 'sku', 'upc', 'department', 'departmentId', 'class');
+        res.body.should.include.keys('name', 'sku', 'upc', 'department', 'departmentId', 'classId', 'modelNumber');
         res.body.should.not.include.keys('error');
         res.body.upc.should.equal(newUPC);
+        res.body.modelNumber.should.be.a('string');
         res.body.name.should.be.a('string');
         res.body.sku.should.be.a('number');
         res.body.upc.should.be.a('string');
         res.body.department.should.be.a('string');
         res.body.departmentId.should.be.a('number');
-        res.body.class.should.be.a('string');
+        res.body.classId.should.be.a('number');
       });
   });
   it('should return an error message for an invalid UPC', () => {
