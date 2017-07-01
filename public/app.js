@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import 'babel-polyfill';
 
 $(() => {
   loadCookie();
@@ -12,21 +12,14 @@ $(() => {
 
 window.state = {
   products: [],
-  finalList: []
+  finalList: [],
 };
 
-const validUPC = () => {
-  let clientUPCValue = _.trim($('#upc').val());
-  if (clientUPCValue.length == 12) {
-    callBbyAPI(clientUPCValue);
-  }
-}
-
-const callBbyAPI = (clientUPCValue) => {
-  $.post('/', `upc=${clientUPCValue}`, (data) => {
+const callBbyAPI = clientUPCValue => {
+  $.post('/', `upc=${clientUPCValue}`, data => {
     if ('message' in data) {
-      alert('UPC not recognized. Try scanning again.');
-      setTimeout(() => $('#upc').val(''), 250);
+      alert(data.message);
+      setTimeout(() => $('#upc').val(''), 150);
       syncCookies();
     } else {
       $('table').show();
@@ -37,12 +30,12 @@ const callBbyAPI = (clientUPCValue) => {
         data.quantity = 1;
         state.products.push(data);
       }
-      setTimeout(() => $('#upc').val(''), 250);
+      setTimeout(() => $('#upc').val(''), 150);
       syncCookies();
       renderProduct(data);
     }
   });
-}
+};
 
 const doesExist = data => {
   if (!_.some(state.products, data)) {
@@ -50,18 +43,25 @@ const doesExist = data => {
   } else {
     return true;
   }
-}
+};
 
 const handleUPCInput = () => {
   $('#upc').on('input', () => {
     validUPC();
   });
-}
+};
+
+const validUPC = () => {
+  let clientUPCValue = $('#upc').val();
+  if (clientUPCValue.length === 12) {
+    callBbyAPI(clientUPCValue);
+  }
+};
 
 const syncCookies = () => {
   let jsonState = JSON.stringify(state.products);
   createCookie('cookieState', jsonState, 1);
-}
+};
 
 const loadCookie = () => {
   if (document.cookie.indexOf('cookieState') > -1) {
@@ -73,12 +73,10 @@ const loadCookie = () => {
   } else {
     $('table').hide();
   }
-}
+};
 
-const bindDataToHTML = (data) => {
-
-  let productDetailsHTML = (
-    `
+const bindDataToHTML = data => {
+  let productDetailsHTML = `
     <tr id=''>
       <td class='department' scope='row'></td>
       <td class='class'></td>
@@ -90,8 +88,7 @@ const bindDataToHTML = (data) => {
       <td class='remove-item'><button>remove</button></td>
       <td class='decrement-quantity'><button>-1</button></td>
     </tr>
-    `
-  );
+    `;
 
   let $productRow = $(productDetailsHTML);
 
@@ -99,16 +96,17 @@ const bindDataToHTML = (data) => {
   $productRow.find('.name').text(data.name);
   $productRow.find('.sku').text(data.sku);
   $productRow.find('.upc').text(data.upc);
-  $productRow.find('.department').text(data.departmentId + ' - ' + data.department);
+  $productRow
+    .find('.department')
+    .text(data.departmentId + ' - ' + data.department);
   $productRow.find('.class').text(data.classId);
   $productRow.find('.model').text(data.modelNumber);
   $productRow.find('.quantity').text(data.quantity);
 
   return $productRow;
-}
+};
 
-
-const renderProduct = (data) => {
+const renderProduct = data => {
   let productHTML = bindDataToHTML(data);
 
   let sku = '#' + data.sku;
@@ -118,9 +116,9 @@ const renderProduct = (data) => {
     let $productQty = parseInt($(sku + ' .quantity').text());
     $(sku + ' .quantity').text($productQty + 1);
   } else {
-    $('#table-body').append(productHTML);
+    $('#table-body').prepend(productHTML);
   }
-}
+};
 
 const handleRemoveItem = () => {
   $('#table-body').on('click', '.remove-item', e => {
@@ -131,7 +129,7 @@ const handleRemoveItem = () => {
     _.remove(state.products, product);
     syncCookies();
   });
-}
+};
 
 const handleDecrementQty = () => {
   $('#table-body').on('click', '.decrement-quantity', e => {
@@ -149,7 +147,7 @@ const handleDecrementQty = () => {
     }
     syncCookies();
   });
-}
+};
 
 const handleClearTable = () => {
   $('#clear-table').on('click', e => {
@@ -157,7 +155,7 @@ const handleClearTable = () => {
     state.products = [];
     clearTable();
   });
-}
+};
 
 const handleFormatTable = () => {
   $('#format-table').on('click', e => {
@@ -167,53 +165,57 @@ const handleFormatTable = () => {
     syncCookies();
     $('table').show();
   });
-}
+};
 
 const handlePrint = () => {
   $('#print-table').on('click', e => {
     window.print();
   });
-}
+};
 
 const sortProducts = () => {
   let tempState = state.products;
   state.finalList = orderProducts(tempState);
   state.products = state.finalList;
-}
+};
 
-const orderProducts = (productArr) => {
-  return _.orderBy(productArr, ['departmentId', 'classId', 'sku'], ['asc', 'asc', 'asc']);
-}
+const orderProducts = productArr => {
+  return _.orderBy(
+    productArr,
+    ['departmentId', 'classId', 'sku'],
+    ['asc', 'asc', 'asc']
+  );
+};
 
-const renderTable = (collection) => {
+const renderTable = collection => {
   _.map(collection, element => {
     renderProduct(element);
   });
-}
+};
 
 const clearTable = () => {
   $('#table-body').children().remove();
   $('table').hide();
-}
+};
 
 const createCookie = (name, value, days) => {
   let expires;
   if (days) {
     let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = `; expires=${date.toGMTString()}`;
   } else {
     expires = '';
   }
   document.cookie = `${name}=${value}${expires}; path=/`;
-}
+};
 
-const getCookie = (c_name) => {
+const getCookie = c_name => {
   if (document.cookie.length > 0) {
     let c_start = document.cookie.indexOf(`${c_name}=`);
     if (c_start != -1) {
       c_start = c_start + c_name.length + 1;
-      let c_end = document.cookie.indexOf(";", c_start);
+      let c_end = document.cookie.indexOf(';', c_start);
       if (c_end == -1) {
         c_end = document.cookie.length;
       }
@@ -221,8 +223,8 @@ const getCookie = (c_name) => {
     }
   }
   return '';
-}
+};
 
-const eraseCookie = (name) => {
+const eraseCookie = name => {
   createCookie(name, '', -1);
-}
+};

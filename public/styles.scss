@@ -46,7 +46,7 @@ header {
   border: 1px solid grey;
   border-radius: 3px;
   text-align: center;
-  width: 250px
+  width: 250px;
 }
 
 .table-buttons {
@@ -58,7 +58,7 @@ header {
     @include button-styles(#c1000d);
   }
   #print-table {
-    @include button-styles(#00ABE7)
+    @include button-styles(#00ABE7);
   }
 }
 
@@ -67,7 +67,9 @@ table {
   margin: 10px auto;
   border-collapse: collapse;
   border: 1px solid #eee;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.10), 0px 10px 20px rgba(0, 0, 0, 0.05), 0px 20px 20px rgba(0, 0, 0, 0.05), 0px 30px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.10),
+    0px 10px 20px rgba(0, 0, 0, 0.05), 0px 20px 20px rgba(0, 0, 0, 0.05),
+    0px 30px 20px rgba(0, 0, 0, 0.05);
   tr {
     &:hover {
       background: #f4f4f4;
@@ -99,8 +101,10 @@ table {
   header,
   #table-body .remove-item,
   #table-body .decrement-quantity,
-  thead tr th:nth-child(9), // -1 button
-  thead tr th:nth-child(8), // remove button
+  thead tr th:nth-child(9),
+  // -1 button
+  thead tr th:nth-child(8),
+  // remove button
   .table-buttons,
   #upc {
     display: none;
