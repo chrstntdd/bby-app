@@ -23,7 +23,7 @@ let generateValidUPC = () => {
     '818279015058',
     '600603166860',
     '617885008184',
-    '086429215126',
+    '086429215126'
   ];
   return _.sample(validUPCs);
 };
@@ -31,7 +31,7 @@ let generateValidUPC = () => {
 let generateInvalidUPC = () =>
   faker.random.number({
     min: 100000000000,
-    max: 999999999999,
+    max: 999999999999
   });
 
 describe('Best Buy API response', () => {
@@ -72,9 +72,11 @@ describe('Best Buy API response', () => {
     return chai.request(app).post('/').send(`upc=${newUPC}`).then(res => {
       res.should.be.json;
       res.body.should.be.an('object');
-      res.body.should.have.keys('error', 'message');
-      res.body.error.should.equal('NO PRODUCTS FOUND.');
-      res.body.message.should.equal('Try your search again please.');
+      console.error(res.body);
+      res.body.should.have.keys('message');
+      res.body.message.should.equal(
+        'UPC not recognized. Please try your search again.'
+      );
     });
   });
 });

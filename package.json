@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Christian Todd <christiantodd27@icloud.com>",
   "license": "MIT",
+  "engines": {
+    "node": "8.1.4"
+  },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "bestbuy": "^1.1.0",
