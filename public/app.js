@@ -12,7 +12,7 @@ $(() => {
 
 window.state = {
   products: [],
-  finalList: [],
+  finalList: []
 };
 
 const callBbyAPI = clientUPCValue => {
@@ -183,7 +183,7 @@ const orderProducts = productArr => {
   return _.orderBy(
     productArr,
     ['departmentId', 'classId', 'sku'],
-    ['asc', 'asc', 'asc']
+    ['desc', 'desc', 'desc']
   );
 };
 
