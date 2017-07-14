@@ -19,7 +19,7 @@ const callBbyAPI = clientUPCValue => {
   $.post('/', `upc=${clientUPCValue}`, data => {
     if ('message' in data) {
       alert(data.message);
-      setTimeout(() => $('#upc').val(''), 150);
+      setTimeout(() => $('#upc').val(''), 50);
       syncCookies();
     } else {
       $('table').show();
@@ -52,9 +52,20 @@ const handleUPCInput = () => {
 };
 
 const validUPC = () => {
+  // GET RAW VALUE FROM DOM
   let clientUPCValue = $('#upc').val();
-  if (clientUPCValue.length === 12) {
-    callBbyAPI(clientUPCValue);
+
+  // CONVERT INPUT TO ARR AND PARSE EACH VALUE AS AN INT
+  let clientUPCArr = clientUPCValue.split('').map(num => parseInt(num, 10));
+
+  // CHECK THAT EACH ENTRY IN THE ARRAY IS A VALID NUMBER
+  let UPCNumArr = clientUPCArr.filter(num => _.isInteger(num));
+
+  // CONVERT BACK TO STRING
+  let HopefullyValidUPC = UPCNumArr.join('').toString();
+
+  if (HopefullyValidUPC.length === 12) {
+    callBbyAPI(HopefullyValidUPC);
   }
 };
 
