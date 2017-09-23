@@ -18,11 +18,14 @@
       <h3>by <a href='https://github.com/chrstntdd'>Christian Todd</a></h3>
     </header>
     <section>
-      <input id='upc' type='number' placeholder='Enter UPC' autofocus autcomplete='off' max-length='12' pattern='[0-9]+'>
+      <div id='redirect'>
+        <p>Thank you for using this application. Unfortunately, this site is now depreciated. Please go to <a href="https://developer-madeline-27128.netlify.com/sign-up">the new site</a>          and sign up.</p>
+      </div>
+      <input id='upc' type='number' disabled placeholder='Enter UPC' autofocus autcomplete='off' max-length='12' pattern='[0-9]+'>
       <div class="table-buttons">
-        <button id='format-table'>FORMAT TABLE</button>
-        <button id='print-table'>PRINT TABLE</button>
-        <button id='clear-table'>CLEAR TABLE</button>
+        <button disabled id='format-table'>FORMAT TABLE</button>
+        <button disabled id='print-table'>PRINT TABLE</button>
+        <button disabled id='clear-table'>CLEAR TABLE</button>
       </div>
       <table>
         <thead>
